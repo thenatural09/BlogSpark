@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Main {
     public static User user;
-    public static ArrayList<User> users;
+    public static ArrayList<User> users = new ArrayList<>();
 
     public static void main(String[] args) {
         Spark.get(
@@ -56,8 +56,9 @@ public class Main {
         Spark.post (
                 "/createMessage",
                 (request, response) -> {
-                    Message line = (Message) request.queryParams();
-                    user.messages.add(line);
+                    String line = request.queryParams("messageLine");
+                    Message message = new Message(line);
+                    user.messages.add(message);
                     response.redirect("/");
                     return null;
                 }

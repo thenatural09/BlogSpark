@@ -1,7 +1,20 @@
 <html>
 <body>
 
+{{#name}}
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+</form>
 
+<form action="/createMessage" method="post">
+    <input type="text" placeholder="Enter a message" name="messageLine">
+    <button type="submit">Submit</button>
+</form>
+{{/name}}
+
+{{^name}}
+<a href="/login">Login</a>
+{{/name}}
 
 </body>
 </html>
