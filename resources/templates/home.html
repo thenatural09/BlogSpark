@@ -10,11 +10,23 @@
     <input type="text" placeholder="Enter a message" name="messageLine">
     <button type="submit">Submit</button>
 </form>
+
+Messages by: {{name}}<br>
+
+<ul>
+    {{#messages}}
+    <li>
+        {{line}}
+    </li>
+    {{/messages}}
+</ul>
+
+</body>
+</html>
 {{/name}}
 
 {{^name}}
 <a href="/login">Login</a>
 {{/name}}
+<br><br>
 
-</body>
-</html>

@@ -18,6 +18,7 @@ public class Main {
                     HashMap m = new HashMap<>();
                     if (user != null) {
                         m.put("name",user.name);
+                        m.put("messages",user.messages);
                     }
                     m.put("users",users);
                     return new ModelAndView(m,"home.html");
@@ -37,7 +38,8 @@ public class Main {
                 (request,response) -> {
                     String name = request.queryParams("loginName");
                     String password = request.queryParams("loginPassword");
-                    user = new User(name,password,null);
+                    ArrayList<Message> messages = new ArrayList<>();
+                    user = new User(name,password,messages);
                     users.add(user);
                     response.redirect("/");
                     return null;
@@ -57,8 +59,7 @@ public class Main {
                 "/createMessage",
                 (request, response) -> {
                     String line = request.queryParams("messageLine");
-                    Message message = new Message(line);
-                    user.messages.add(message);
+                    user.messages.add(new Message(line));
                     response.redirect("/");
                     return null;
                 }
