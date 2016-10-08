@@ -100,5 +100,24 @@ public class Main {
                     return null;
                 }
         );
+
+        Spark.post (
+                "/editMessage",
+                (request,response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = users.get(name);
+                    if (user == null) {
+                        return null;
+                    }
+                    String linNum = request.queryParams("editNumLine");
+                    int i = Integer.valueOf(linNum) - 1;
+                    String linEdit = request.queryParams("editLine");
+                    Message message = new Message(linEdit);
+                    user.messages.set(i,message);
+                    response.redirect("/");
+                    return null;
+                }
+        );
     }
 }
