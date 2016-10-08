@@ -99,6 +99,10 @@ public class Main {
                         response.redirect("/");
                         return null;
                     }
+                    if (user.messages.size() == 0) {
+                        response.redirect("/");
+                        return null;
+                    }
                     user.messages.remove(i);
                     response.redirect("/");
                     return null;
@@ -122,7 +126,11 @@ public class Main {
                         response.redirect("/");
                         return null;
                     }
-                    user.messages.set(i,message);
+                    if (user.messages.size() == 0) {
+                        response.redirect("/");
+                        return null;
+                    }
+                    user.messages.set(i, message);
                     response.redirect("/");
                     return null;
                 }
