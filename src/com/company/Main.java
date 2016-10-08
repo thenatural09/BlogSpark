@@ -1,6 +1,7 @@
 package com.company;
 
 import spark.ModelAndView;
+import spark.Session;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
 
@@ -8,19 +9,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
-    public static User user;
-    public static ArrayList<User> users = new ArrayList<>();
+    public static HashMap<String,User> users = new HashMap<>();
 
     public static void main(String[] args) {
         Spark.get(
                 "/",
                 (request,response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = users.get(name);
+
                     HashMap m = new HashMap<>();
                     if (user != null) {
                         m.put("name",user.name);
                         m.put("messages",user.messages);
                     }
-                    m.put("users",users);
                     return new ModelAndView(m,"home.html");
                 },
                 new MustacheTemplateEngine()
@@ -39,8 +42,17 @@ public class Main {
                     String name = request.queryParams("loginName");
                     String password = request.queryParams("loginPassword");
                     ArrayList<Message> messages = new ArrayList<>();
-                    user = new User(name,password,messages);
-                    users.add(user);
+                    User user = users.get(name);
+                    if (user == null) {
+                        user = new User(name,password,messages);
+                        users.put(name,user);
+                    }
+                    else if(!password.equals(user.password)) {
+                        response.redirect("/");
+                        return null;
+                    }
+                    Session session = request.session();
+                    session.attribute("loginName",name);
                     response.redirect("/");
                     return null;
                 }
@@ -49,7 +61,8 @@ public class Main {
         Spark.post (
                 "/logout",
                 (request,response) -> {
-                    user = null;
+                    Session session = request.session();
+                    session.invalidate();
                     response.redirect("/");
                     return null;
                 }
@@ -58,6 +71,12 @@ public class Main {
         Spark.post (
                 "/createMessage",
                 (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = users.get(name);
+                    if (user == null) {
+                        return null;
+                    }
                     String line = request.queryParams("messageLine");
                     user.messages.add(new Message(line));
                     response.redirect("/");
