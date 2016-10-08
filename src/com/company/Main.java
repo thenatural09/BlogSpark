@@ -83,5 +83,22 @@ public class Main {
                     return null;
                 }
         );
+
+        Spark.post (
+                "/deleteMessage",
+                (request,response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = users.get(name);
+                    if (user == null) {
+                        return null;
+                    }
+                    String linNum = request.queryParams("deleteNumLine");
+                    int i = Integer.valueOf(linNum) - 1;
+                    user.messages.remove(i);
+                    response.redirect("/");
+                    return null;
+                }
+        );
     }
 }

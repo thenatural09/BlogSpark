@@ -11,15 +11,21 @@
     <button type="submit">Submit</button>
 </form>
 
+<form action="/deleteMessage" method="post">
+    <input type="text" placeholder="Message #" name="deleteNumLine">
+    <button type="submit">Delete</button>
+</form>
+
+
 Messages by: {{name}}<br>
 
-<ul>
+<ol>
     {{#messages}}
     <li>
         {{line}}
     </li>
     {{/messages}}
-</ul>
+</ol>
 
 </body>
 </html>
