@@ -95,6 +95,10 @@ public class Main {
                     }
                     String linNum = request.queryParams("deleteNumLine");
                     int i = Integer.valueOf(linNum) - 1;
+                    if (i > user.messages.size()) {
+                        response.redirect("/");
+                        return null;
+                    }
                     user.messages.remove(i);
                     response.redirect("/");
                     return null;
@@ -114,6 +118,10 @@ public class Main {
                     int i = Integer.valueOf(linNum) - 1;
                     String linEdit = request.queryParams("editLine");
                     Message message = new Message(linEdit);
+                    if(i > user.messages.size()) {
+                        response.redirect("/");
+                        return null;
+                    }
                     user.messages.set(i,message);
                     response.redirect("/");
                     return null;
