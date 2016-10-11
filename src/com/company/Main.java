@@ -93,17 +93,23 @@ public class Main {
                     if (user == null) {
                         return null;
                     }
-                    String linNum = request.queryParams("deleteNumLine");
-                    int i = Integer.valueOf(linNum) - 1;
-                    if (i > user.messages.size()) {
+                    try {
+                        String linNum = request.queryParams("deleteNumLine");
+                        int i = Integer.valueOf(linNum) - 1;
+                        if (i > user.messages.size()) {
+                            response.redirect("/");
+                            return null;
+                        }
+                        if (user.messages.size() == 0) {
+                            response.redirect("/");
+                            return null;
+                        }
+                        user.messages.remove(i);
+                    }
+                    catch (Exception e) {
                         response.redirect("/");
                         return null;
                     }
-                    if (user.messages.size() == 0) {
-                        response.redirect("/");
-                        return null;
-                    }
-                    user.messages.remove(i);
                     response.redirect("/");
                     return null;
                 }
@@ -118,19 +124,25 @@ public class Main {
                     if (user == null) {
                         return null;
                     }
-                    String linNum = request.queryParams("editNumLine");
-                    int i = Integer.valueOf(linNum) - 1;
-                    String linEdit = request.queryParams("editLine");
-                    Message message = new Message(linEdit);
-                    if(i > user.messages.size()) {
+                    try {
+                        String linNum = request.queryParams("editNumLine");
+                        int i = Integer.valueOf(linNum) - 1;
+                        String linEdit = request.queryParams("editLine");
+                        Message message = new Message(linEdit);
+                        if (i > user.messages.size()) {
+                            response.redirect("/");
+                            return null;
+                        }
+                        if (user.messages.size() == 0) {
+                            response.redirect("/");
+                            return null;
+                        }
+                        user.messages.set(i, message);
+                    }
+                    catch (Exception e) {
                         response.redirect("/");
                         return null;
                     }
-                    if (user.messages.size() == 0) {
-                        response.redirect("/");
-                        return null;
-                    }
-                    user.messages.set(i, message);
                     response.redirect("/");
                     return null;
                 }
